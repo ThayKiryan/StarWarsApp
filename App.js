@@ -1,53 +1,32 @@
-import React, { useEffect, useState } from 'react'
+import 'react-native-gesture-handler'
+import React from 'react'
+import AppLoading from 'expo-app-loading'
+import { ThemeProvider } from 'styled-components'
 import {
-  ScreenScrollContainer,
-  Container,
-  HomeList,
-  Hero,
-  Loader,
-} from '~/components'
-import { useGetData } from '~/services/hooks'
+  useFonts,
+  SourceSansPro_400Regular,
+  SourceSansPro_700Bold,
+  SourceSansPro_600SemiBold,
+  SourceSansPro_900Black,
+} from '@expo-google-fonts/source-sans-pro'
+import { theme } from './src/styles'
+import { Routes } from './src/routes'
 
-export const Home = () => {
-  const { getFilms, getCharacters } = useGetData()
-  const [loading, setLoading] = useState(true)
-  const [films, setFilms] = useState([])
-  const [characters, setCharacters] = useState([])
+export default function App() {
+  let [fontsLoaded] = useFonts ({
+    SourceSansPro_400Regular,
+    SourceSansPro_700Bold,
+    SourceSansPro_600SemiBold,
+    SourceSansPro_900Black,
+  })
 
-  const callGetData = async () => {
-    const filmsResponse = await getFilms()
-    const charactersResponse = await getCharacters()
-
-    if (!filmsResponse.error && !charactersResponse.error) {
-      setFilms(filmsResponse)
-      setCharacters(charactersResponse)
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    callGetData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  if (loading) {
-    return (
-      <Container align="center" justify="center">
-        <Loader />
-      </Container>
-    )
+  if(!fontsLoaded) {
+    return <AppLoading/>
   }
 
   return (
-    <ScreenScrollContainer>
-      <Hero
-        item={{
-          ...films[0],
-          type: 'Filme',
-        }}
-      />
-      <HomeList title="Filmes" data={films} type="Filme" />
-      <HomeList title="Personagens" data={characters} type="Personagem" />
-    </ScreenScrollContainer>
+    <ThemeProvider theme={ theme}>
+      <Routes />
+    </ThemeProvider>
   )
 }

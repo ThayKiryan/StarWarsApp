@@ -1,6 +1,6 @@
 export * from './SplashScreen'
 export * from './Home'
 export * from './Detail'
-export * from './Favorites'
+export * from './Favorite'
 export * from './Search'
 export * from './WatchScreen'
